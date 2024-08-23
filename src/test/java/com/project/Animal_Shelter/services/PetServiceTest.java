@@ -5,12 +5,12 @@ import com.project.Animal_Shelter.repositories.IPetRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class AnnouncementServiceTest {
+public class PetServiceTest {
 
     @InjectMocks
-    private PetService announcementService;
+    private PetService petService;
 
     @Mock
-    private IPetRepository iAnnouncementRepository;
-    private Pet announcement;
+    private IPetRepository iPetRepository;
+    private Pet pet;
 }
