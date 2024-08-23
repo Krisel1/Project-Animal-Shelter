@@ -1,5 +1,6 @@
 package com.project.Animal_Shelter.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -42,6 +44,13 @@ public class Pet {
     @Column(name = "petType")
     private String petType;
 
+    @Column(name = "adopted")
+    private boolean adopted;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User user;
 
 }
 
