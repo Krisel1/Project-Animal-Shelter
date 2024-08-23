@@ -13,22 +13,19 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Announcement")
-public class Announcement {
+@Table(name = "Pet")
+public class Pet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "dateTime")
-    private LocalDateTime dateTime;
+    @Column(name = "dateBirth")
+    private LocalDateTime dateBirth;
 
     @Column(name = "petName")
     private String petName;
-
-    @Column(name = "title")
-    private String title;
 
     @Column(name = "description")
     private String description;
@@ -36,8 +33,15 @@ public class Announcement {
     @Column(name = "age")
     private String age;
 
+    @Column(name = "Sterilized")
+    private boolean Sterilized;
+
     @Column(name = "breed")
     private String breed;
+
+    @Column(name = "petType")
+    private String petType;
+
 
 }
 

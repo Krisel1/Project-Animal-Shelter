@@ -21,16 +21,8 @@ public class Donation {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "age")
-    private int age;
+    @Column(name = "donation")
+    private String donation;
 
-    @Column(name = "breed")
-    private String breed;
-
-    @Column(name = "gender")
-    private String gender;
-
-    @Column(name = "profileImage")
-    private String profileImage;
 
 }
