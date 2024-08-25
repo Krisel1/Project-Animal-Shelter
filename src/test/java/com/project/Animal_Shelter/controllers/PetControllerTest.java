@@ -13,7 +13,7 @@ public class PetControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private PetService announcementService;
+    private PetService petService;
     private DonationService donationService;
 
 

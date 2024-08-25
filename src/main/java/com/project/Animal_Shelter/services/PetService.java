@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 public class PetService {
 
     @Autowired
-    IPetRepository iAnnouncementRepository;
+    IPetRepository iPetRepository;
 
 }
