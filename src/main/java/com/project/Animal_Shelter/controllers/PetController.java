@@ -28,7 +28,7 @@ public class PetController {
     }
     @GetMapping(path = "/withoutAdopted")
     public List<Pet> getAllAnimalsWithoutAdopted() {
-        return (List<Pet>) getAllAnimalsWithoutAdopted();
+        return petService.getAllAnimalsWithoutAdopted();
     }
     @GetMapping(path = "/adopted/{user_id}")
     public List<Pet> getAllByUserId(@PathVariable Long user_id) {

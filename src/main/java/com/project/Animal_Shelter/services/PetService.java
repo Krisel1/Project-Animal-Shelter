@@ -34,5 +34,4 @@ public class PetService {
     public List<Pet> getAllByUserId(Long user_id) {
         return iPetRepository.findByUserId(user_id);
     }
-
 }

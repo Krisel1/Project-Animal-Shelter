@@ -55,30 +55,30 @@ public class PetServiceTest {
     }
     @Test
     void get_all_pets_without_adopted() {
-        ArrayList<Pet> pets = new ArrayList<>();
+        ArrayList<Pet> petsList = new ArrayList<>();
         Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
         Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
         Pet thirdPet = new Pet(3L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
-        pets.add(pet);
-        pets.add(secondPet);
-        pets.add(thirdPet);
-        when(iPetRepository.findAll()).thenReturn(pets);
+        petsList.add(pet);
+        petsList.add(secondPet);
+        petsList.add(thirdPet);
+        when(iPetRepository.findAll()).thenReturn(petsList);
         List<Pet> result = petService.getAllAnimalsWithoutAdopted();
         assertNotNull(result);
-        assertEquals(3, pets.size());
+        assertEquals(3, petsList.size());
         assertEquals(2, result.size());
         assertEquals(1L, result.get(0).getId());
         assertEquals(3L, result.get(1).getId());
     }
     @Test
     void get_pest_by_user_ID() {
-        ArrayList<Pet> pets = new ArrayList<>();
+        ArrayList<Pet> petsList = new ArrayList<>();
         User firstUser = new User(1L, "Juan", "1234", null);
         Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, firstUser);
         Pet thirdPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, firstUser);
-        pets.add(pet);
-        pets.add(thirdPet);
-        when(iPetRepository.findByUserId(1L)).thenReturn(pets);
+        petsList.add(pet);
+        petsList.add(thirdPet);
+        when(iPetRepository.findByUserId(1L)).thenReturn(petsList);
         List<Pet> result = iPetRepository.findByUserId(1L);
         assertNotNull(result);
         assertEquals(2, result.size());
