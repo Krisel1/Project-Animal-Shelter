@@ -10,5 +10,7 @@ public class DonationService {
     @Autowired
     IDonationRepository iDonationRepository;
 
-
+    public void deleteDonation(long id) {
+        iDonationRepository.deleteById(id);
+    }
 }

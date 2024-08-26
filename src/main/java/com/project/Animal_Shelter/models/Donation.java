@@ -22,7 +22,7 @@ public class Donation {
     private String name;
 
     @Column(name = "donation")
-    private String donation;
+    private int donation;
 
 
 }
