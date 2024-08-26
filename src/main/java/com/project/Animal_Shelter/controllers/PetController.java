@@ -54,6 +54,9 @@ public class PetController {
         petService.updatePet(pet, id);
     }
 
-
+    @PostMapping(path = "/{id}")
+    public Pet createPet(@RequestBody Pet pet) {
+        return petService.createPet(pet);
+    }
 
 }

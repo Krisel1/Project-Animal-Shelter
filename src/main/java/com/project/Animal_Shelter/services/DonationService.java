@@ -26,5 +26,9 @@ public class DonationService {
         donation.setId(id);
         iDonationRepository.save(donation);
     }
+    public Donation createDonation(Donation donation) {
+        return iDonationRepository.save(donation);
+
+    }
 
 }

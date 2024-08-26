@@ -52,4 +52,7 @@ public class PetService {
         pet.setId(id);
         iPetRepository.save(pet);
     }
+    public Pet createPet(Pet pet) {
+        return iPetRepository.save(pet);
+    }
 }

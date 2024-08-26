@@ -32,4 +32,10 @@ public class DonationController {
     public void updateDonation(@RequestBody Donation donation, @PathVariable Long id) {
         donationService.updateDonation(donation, id);
     }
+    @PostMapping(path = "/{id}")
+    public Donation createDonation(@RequestBody Donation donation) {
+        return donationService.createDonation(donation);
+
+
+    }
 }
