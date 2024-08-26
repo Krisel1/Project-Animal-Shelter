@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/donations")
@@ -21,5 +22,14 @@ public class DonationController {
     @GetMapping(path = "/{id}")
     public Donation getDonationByID(@PathVariable Long id) {
         return donationService.getDonationByID(id);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public void deleteDonationById(@PathVariable("id") Long id) {
+        donationService.deleteDonation(id);
+    }
+    @PutMapping(path = "/{id}")
+    public void updateDonation(@RequestBody Donation donation, @PathVariable Long id) {
+        donationService.updateDonation(donation, id);
     }
 }

@@ -19,4 +19,12 @@ public class DonationService {
     public Donation getDonationByID(Long id) {
         return iDonationRepository.findById(id).orElseThrow();
     }
+    public void deleteDonation(long id) {
+        iDonationRepository.deleteById(id);
+    }
+    public void updateDonation(Donation donation, long id) {
+        donation.setId(id);
+        iDonationRepository.save(donation);
+    }
+
 }

@@ -44,4 +44,12 @@ public class PetService {
         }
         return adoptedAnimalsList;
     }
+    public void deletePet(long id) {
+        iPetRepository.deleteById(id);
+    }
+
+    public void updatePet(Pet pet, long id) {
+        pet.setId(id);
+        iPetRepository.save(pet);
+    }
 }
