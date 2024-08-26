@@ -1,6 +1,7 @@
 package com.project.Animal_Shelter.models;
 
-public class Roles {
-
+public class ERole {
+ADMIN,
+USER
 
 }
