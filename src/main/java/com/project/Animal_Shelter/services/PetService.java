@@ -21,17 +21,27 @@ public class PetService {
         return iPetRepository.findById(id).orElseThrow();
     }
     public List<Pet> getAllAnimalsWithoutAdopted() {
-        ArrayList<Pet> allNotAdoptedAnimals = new ArrayList<>();
+        ArrayList<Pet> allNotAdoptedAnimalsList = new ArrayList<>();
         List<Pet> allPets = (List<Pet>) iPetRepository.findAll();
         for (Pet pet : allPets) {
             if(!pet.isAdopted()) {
-                allNotAdoptedAnimals.add(pet);
+                allNotAdoptedAnimalsList.add(pet);
             }
         }
-        return allNotAdoptedAnimals;
+        return allNotAdoptedAnimalsList;
     }
 
     public List<Pet> getAllByUserId(Long user_id) {
         return iPetRepository.findByUserId(user_id);
+    }
+    public List<Pet> getAllAnimalsAdopted() {
+        ArrayList<Pet> adoptedAnimalsList = new ArrayList<>();
+        List<Pet> allPets = (List<Pet>) iPetRepository.findAll();
+        for (Pet pet : allPets) {
+            if(pet.isAdopted()) {
+                adoptedAnimalsList.add(pet);
+            }
+        }
+        return adoptedAnimalsList;
     }
 }

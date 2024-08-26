@@ -52,6 +52,7 @@ public class PetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L));
     }
+
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void get_all_by_user_id() throws Exception {
@@ -67,16 +68,32 @@ public class PetControllerTest {
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[1].id").value(2L));
     }
+
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void get_all_animals_without_adopted() throws Exception {
         ArrayList<Pet> petsList = new ArrayList<>();
         Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
         petsList.add(pet);
         petsList.add(secondPet);
         when(petService.getAllAnimalsWithoutAdopted()).thenReturn(petsList);
         mockMvc.perform(get("/pets/withoutAdopted"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[1].id").value(2L));
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    void get_all_animals_adopted() throws Exception {
+        ArrayList<Pet> petsList = new ArrayList<>();
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
+        petsList.add(pet);
+        petsList.add(secondPet);
+        when(petService.getAllAnimalsAdopted()).thenReturn(petsList);
+        mockMvc.perform(get("/pets/adopted"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[1].id").value(2L));

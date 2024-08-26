@@ -85,4 +85,18 @@ public class PetServiceTest {
         assertEquals(1L, result.get(0).getId());
         assertEquals(2L, result.get(1).getId());
     }
+    @Test
+    void get_all_pets_adopted() {
+        ArrayList<Pet> petsList = new ArrayList<>();
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
+        petsList.add(pet);
+        petsList.add(secondPet);
+        when(iPetRepository.findAll()).thenReturn(petsList);
+        List<Pet> result = petService.getAllAnimalsAdopted();
+        assertNotNull(result);
+        assertEquals(2, petsList.size());
+        assertEquals(1, result.size());
+        assertEquals(2L, result.get(0).getId());
+    }
 }
