@@ -13,24 +13,24 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping
+@RequestMapping("/pets")
 public class PetController {
 
     @Autowired
     PetService petService;
-    @GetMapping(path = "/pets")
+    @GetMapping
     public List<Pet> getAllPets() {
         return petService.getAllPets();
     }
-    @GetMapping(path = "/pets/{id}")
+    @GetMapping(path = "/{id}")
     public Pet getPetByID(@PathVariable Long id) {
         return petService.getPetByID(id);
     }
-    @GetMapping(path = "/donations/withoutAdopted")
+    @GetMapping(path = "/withoutAdopted")
     public List<Pet> getAllAnimalsWithoutAdopted() {
         return (List<Pet>) getAllAnimalsWithoutAdopted();
     }
-    @GetMapping(path = "/donations/{user_id}")
+    @GetMapping(path = "/adopted/{user_id}")
     public List<Pet> getAllByUserId(@PathVariable Long user_id) {
       return petService.getAllByUserId(user_id);
     }

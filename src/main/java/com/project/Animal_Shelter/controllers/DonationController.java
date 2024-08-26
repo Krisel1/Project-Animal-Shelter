@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/donations")
 public class DonationController {
 
     @Autowired
     DonationService donationService;
 
-    @GetMapping(path = "/donations")
+    @GetMapping
     public List<Donation> getAllDonations() {
         return donationService.getAllDonations();
     }
-    @GetMapping(path = "/donations/{id}")
+    @GetMapping(path = "/{id}")
     public Donation getDonationByID(@PathVariable Long id) {
         return donationService.getDonationByID(id);
     }

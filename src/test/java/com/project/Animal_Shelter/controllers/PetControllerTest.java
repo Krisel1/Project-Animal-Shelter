@@ -3,6 +3,7 @@ package com.project.Animal_Shelter.controllers;
 
 import com.project.Animal_Shelter.services.PetService;
 import com.project.Animal_Shelter.services.DonationService;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,6 +17,8 @@ public class PetControllerTest {
     private PetService announcementService;
     private DonationService donationService;
 
+    @Test
+    void get_all_pets()
 
 }
 
