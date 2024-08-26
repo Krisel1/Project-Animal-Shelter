@@ -10,8 +10,9 @@ public class DonationService {
 
     @Autowired
     IDonationRepository iDonationRepository;
+
     public Donation createDonation(Donation donation) {
+        return iDonationRepository.save(donation);
 
-        return donationRepository.save(donation);
-
+    }
 }

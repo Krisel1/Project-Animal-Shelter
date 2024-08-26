@@ -11,8 +11,7 @@ public class PetService {
     @Autowired
     IPetRepository iPetRepository;
     public Pet createPet(Pet pet) {
-
-        return petRepository.save(pet);
+        return iPetRepository.save(pet);
 
     }
 }
