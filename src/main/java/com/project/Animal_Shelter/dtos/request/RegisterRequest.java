@@ -1,5 +1,6 @@
 package com.project.Animal_Shelter.dtos.request;
 
+import com.project.Animal_Shelter.models.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
