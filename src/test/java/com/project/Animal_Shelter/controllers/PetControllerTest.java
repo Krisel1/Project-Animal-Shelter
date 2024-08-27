@@ -1,6 +1,7 @@
 package com.project.Animal_Shelter.controllers;
 
 
+import com.project.Animal_Shelter.models.Donation;
 import com.project.Animal_Shelter.models.Pet;
 import com.project.Animal_Shelter.models.User;
 import com.project.Animal_Shelter.services.PetService;
@@ -97,6 +98,26 @@ public class PetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[1].id").value(2L));
+    }
+
+    @Test
+    public void testUpdatePet() {
+
+        Long id = 1L;
+        Pet pet = new Pet();
+        pet.setId(id);
+        pet.setDateBirth(LocalDateTime.of(2020,2,14,11,0));
+        pet.setPetName("Neo");
+        pet.setDescription("shy");
+        pet.setAge("4");
+        pet.setSterilized(true);
+        pet.setBreed("labrador");
+        pet.setPetType("Dog");
+        pet.setAdopted(true);
+
+        petService.updatePet(pet, id);
+
+        verify(petService, times(1)).updatePet(pet, id);
     }
 }
 

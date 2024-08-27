@@ -56,4 +56,17 @@ public class DonationControllerTest {
                 .andExpect(jsonPath("$.name").value("Vadim"))
                 .andExpect(jsonPath("$.donation").value(1000));
     }
+    @Test
+    public void testUpdateDonation() {
+
+        Long id = 1L;
+        Donation donation = new Donation();
+        donation.setId(id);
+        donation.setName("pepe");
+        donation.setDonation(23);
+
+        donationService.updateDonation(donation, id);
+
+        verify(donationService, times(1)).updateDonation(donation, id);
+    }
 }

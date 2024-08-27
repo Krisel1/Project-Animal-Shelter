@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+
 public class DonationServiceTest {
 
     @InjectMocks
@@ -55,6 +55,20 @@ public class DonationServiceTest {
         assertNotNull(result);
         assertEquals(1L, result.getId());
     }
+    @Test
+    public void testUpdateDonation() {
+
+        long id = 1L;
+        Donation donation = new Donation();
+        donation.setName("Eva");
+        donation.setDonation(7);
 
 
+        donationService.updateDonation(donation, id);
+
+        assert(donation.getId() == id);
+
+
+        verify(iDonationRepository, times(1)).save(donation);
+    }
 }

@@ -1,5 +1,6 @@
 package com.project.Animal_Shelter.services;
 
+import com.project.Animal_Shelter.models.Donation;
 import com.project.Animal_Shelter.models.Pet;
 import com.project.Animal_Shelter.models.User;
 import com.project.Animal_Shelter.repositories.IPetRepository;
@@ -98,5 +99,28 @@ public class PetServiceTest {
         assertEquals(2, petsList.size());
         assertEquals(1, result.size());
         assertEquals(2L, result.get(0).getId());
+    }
+    @Test
+    public void testUpdateDonation() {
+
+        long id = 1L;
+        Pet pet = new Pet();
+        pet.setId(id);
+        pet.setDateBirth(LocalDateTime.of(2008,3,31,11,0));
+        pet.setPetName("Ulises");
+        pet.setDescription("defending family");
+        pet.setAge("12");
+        pet.setSterilized(false);
+        pet.setBreed("dalmatian");
+        pet.setPetType("Dog");
+        pet.setAdopted(true);
+
+
+        petService.updatePet(pet, id);
+
+        assert(pet.getId() == id);
+
+
+        verify(iPetRepository, times(1)).save(pet);
     }
 }
