@@ -1,5 +1,9 @@
 package com.project.Animal_Shelter.controllers;
 
+import com.project.Animal_Shelter.dtos.request.LoginRequest;
+import com.project.Animal_Shelter.dtos.request.RegisterRequest;
+import com.project.Animal_Shelter.dtos.response.AuthResponse;
+import com.project.Animal_Shelter.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
