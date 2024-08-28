@@ -101,7 +101,7 @@ public class PetServiceTest {
         assertEquals(2L, result.get(0).getId());
     }
     @Test
-    public void testUpdateDonation() {
+    public void testUpdatePetService() {
 
         long id = 1L;
         Pet pet = new Pet();

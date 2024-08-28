@@ -56,7 +56,7 @@ public class DonationServiceTest {
         assertEquals(1L, result.getId());
     }
     @Test
-    public void testUpdateDonation() {
+    public void testUpdateDonationService() {
 
         long id = 1L;
         Donation donation = new Donation();
