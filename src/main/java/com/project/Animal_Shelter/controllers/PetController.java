@@ -5,6 +5,7 @@ import com.project.Animal_Shelter.models.Pet;
 import com.project.Animal_Shelter.models.Pet;
 import com.project.Animal_Shelter.services.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,9 +55,11 @@ public class PetController {
         petService.updatePet(pet, id);
     }
 
-    @PostMapping(path = "/{id}")
-    public Pet createPet(@RequestBody Pet pet) {
-        return petService.createPet(pet);
-    }
 
+    @PostMapping
+    public ResponseEntity<Pet> createPet(@RequestBody Pet pet) {
+        Pet createdPet = petService.createPet(pet);
+        return ResponseEntity.ok(createdPet);
+
+    }
 }

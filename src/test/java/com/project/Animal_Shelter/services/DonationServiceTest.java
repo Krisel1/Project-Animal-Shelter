@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+
 
 import java.util.*;
 
@@ -17,11 +17,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
-
 
 public class DonationServiceTest {
 
@@ -71,4 +66,28 @@ public class DonationServiceTest {
 
         verify(iDonationRepository, times(1)).save(donation);
     }
+
+    @Test
+
+    void testCreateDonation() {
+
+        Donation donation = new Donation();
+        donation.setName("John");
+        donation.setDonation(500);
+
+        when(iDonationRepository.save(donation)).thenAnswer(invocation -> {
+            Donation savedDonation = invocation.getArgument(0);
+            savedDonation.setId(1L); // o cualquier otro valor único generado automáticamente
+            return savedDonation;
+
+        });
+
+        Donation createdDonation = donationService.createDonation(donation);
+        assertNotNull(createdDonation);
+        assertEquals(1L, createdDonation.getId());
+        assertEquals("John", createdDonation.getName());
+        assertEquals(500, createdDonation.getDonation());
+
+    }
+
 }

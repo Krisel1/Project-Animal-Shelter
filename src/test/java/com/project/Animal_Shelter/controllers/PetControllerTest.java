@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project.Animal_Shelter.models.Pet;
 import com.project.Animal_Shelter.services.PetService;
 import org.junit.jupiter.api.Test;
@@ -14,28 +15,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.project.Animal_Shelter.models.Donation;
-//import com.project.Animal_Shelter.models.Pet;
+
 import com.project.Animal_Shelter.models.User;
-//import com.project.Animal_Shelter.services.PetService;
-//import com.project.Animal_Shelter.services.DonationService;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.http.MediaType;
-//import org.springframework.test.web.servlet.MockMvc;
-//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-//import org.springframework.security.test.context.support.WithMockUser;
 import java.util.ArrayList;
-//import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.mockito.Mockito.*;
-//import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.post;
-//import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.time.LocalDateTime;
+
 @WebMvcTest(PetController.class)
 public class PetControllerTest {
 
@@ -53,8 +39,8 @@ public class PetControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void get_all_pets() throws Exception {
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", true, null);
         ArrayList<Pet> petsList = new ArrayList<>();
         petsList.add(pet);
         petsList.add(secondPet);
@@ -79,8 +65,8 @@ public class PetControllerTest {
     @WithMockUser(username = "user", roles = {"USER"})
     void get_all_by_user_id() throws Exception {
         User user = new User(1L, "Ivan", "1234", null);
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, user);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, user);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, user);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", true, user);
         ArrayList<Pet> petsList = new ArrayList<>();
         petsList.add(pet);
         petsList.add(secondPet);
@@ -95,8 +81,8 @@ public class PetControllerTest {
     @WithMockUser(username = "user", roles = {"USER"})
     void get_all_animals_without_adopted() throws Exception {
         ArrayList<Pet> petsList = new ArrayList<>();
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null);
         petsList.add(pet);
         petsList.add(secondPet);
         when(petService.getAllAnimalsWithoutAdopted()).thenReturn(petsList);
@@ -110,8 +96,8 @@ public class PetControllerTest {
     @WithMockUser(username = "user", roles = {"USER"})
     void get_all_animals_adopted() throws Exception {
         ArrayList<Pet> petsList = new ArrayList<>();
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", true, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", true, null);
         petsList.add(pet);
         petsList.add(secondPet);
         when(petService.getAllAnimalsAdopted()).thenReturn(petsList);
@@ -127,7 +113,7 @@ public class PetControllerTest {
         Long id = 1L;
         Pet pet = new Pet();
         pet.setId(id);
-        pet.setDateBirth(LocalDateTime.of(2020,2,14,11,0));
+        pet.setDateBirth(LocalDateTime.of(2020, 2, 14, 11, 0));
         pet.setPetName("Neo");
         pet.setDescription("shy");
         pet.setAge("4");
@@ -146,7 +132,6 @@ public class PetControllerTest {
     void testCreatePet() throws Exception {
         // Preparar datos de prueba
         Pet pet = new Pet();
-        pet.setId(1L);
         pet.setDateBirth(LocalDateTime.of(2024, 7, 23, 10, 0));
         pet.setPetName("Buddy");
         pet.setDescription("Friendly dog");
@@ -157,17 +142,25 @@ public class PetControllerTest {
         pet.setAdopted(false);
 
         // Mockear el comportamiento del servicio
-        when(petService.createPet(any(Pet.class))).thenReturn(pet);
+        when(petService.createPet(any(Pet.class))).thenAnswer(invocation -> {
+            Pet petCreated = invocation.getArgument(0);
+            petCreated.setId(1L); // o cualquier otro valor único generado automáticamente
+            return petCreated;
+        });
+
+        // Configurar ObjectMapper
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule()); // Registra el módulo Java 8 Date/Time
 
         // Convertir el objeto Pet a JSON
         String petJson = objectMapper.writeValueAsString(pet);
 
         // Realizar la petición POST al controlador
-        mockMvc.perform(post("/pets{id}", 1) // El endpoint es "/pets/{id}"
+        mockMvc.perform(post("/pets")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(petJson) // Usamos el JSON como contenido de la petición
-                        .with(csrf())) // Incluir un token CSRF simulado
-                .andExpect(status().isOk()) // Esperamos un código 200 OK
+                        .content(petJson)
+                        .with(csrf()))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.petName").value("Buddy"))
                 .andExpect(jsonPath("$.description").value("Friendly dog"))
