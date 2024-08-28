@@ -1,23 +1,40 @@
 package com.project.Animal_Shelter.controllers;
 
-
-import com.project.Animal_Shelter.models.Donation;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.Animal_Shelter.models.Pet;
-import com.project.Animal_Shelter.models.User;
 import com.project.Animal_Shelter.services.PetService;
-import com.project.Animal_Shelter.services.DonationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.security.test.context.support.WithMockUser;
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.project.Animal_Shelter.models.Donation;
+//import com.project.Animal_Shelter.models.Pet;
+import com.project.Animal_Shelter.models.User;
+//import com.project.Animal_Shelter.services.PetService;
+//import com.project.Animal_Shelter.services.DonationService;
+//import org.junit.jupiter.api.Test;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.test.mock.mockito.MockBean;
+//import org.springframework.http.MediaType;
+//import org.springframework.test.web.servlet.MockMvc;
+//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+//import org.springframework.security.test.context.support.WithMockUser;
 import java.util.ArrayList;
-
+//import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.mockito.Mockito.*;
+//import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.post;
+//import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.time.LocalDateTime;
 @WebMvcTest(PetController.class)
 public class PetControllerTest {
@@ -27,7 +44,11 @@ public class PetControllerTest {
 
     @MockBean
     private PetService petService;
-    private DonationService donationService;
+    //private DonationService donationService;
+
+    @Autowired
+    private ObjectMapper objectMapper; // Añadir ObjectMapper
+
 
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
@@ -118,6 +139,43 @@ public class PetControllerTest {
         petService.updatePet(pet, id);
 
         verify(petService, times(1)).updatePet(pet, id);
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    void testCreatePet() throws Exception {
+        // Preparar datos de prueba
+        Pet pet = new Pet();
+        pet.setId(1L);
+        pet.setDateBirth(LocalDateTime.of(2024, 7, 23, 10, 0));
+        pet.setPetName("Buddy");
+        pet.setDescription("Friendly dog");
+        pet.setAge("2");
+        pet.setSterilized(true);
+        pet.setBreed("Labrador");
+        pet.setPetType("Dog");
+        pet.setAdopted(false);
+
+        // Mockear el comportamiento del servicio
+        when(petService.createPet(any(Pet.class))).thenReturn(pet);
+
+        // Convertir el objeto Pet a JSON
+        String petJson = objectMapper.writeValueAsString(pet);
+
+        // Realizar la petición POST al controlador
+        mockMvc.perform(post("/pets{id}", 1) // El endpoint es "/pets/{id}"
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(petJson) // Usamos el JSON como contenido de la petición
+                        .with(csrf())) // Incluir un token CSRF simulado
+                .andExpect(status().isOk()) // Esperamos un código 200 OK
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.petName").value("Buddy"))
+                .andExpect(jsonPath("$.description").value("Friendly dog"))
+                .andExpect(jsonPath("$.age").value("2"))
+                .andExpect(jsonPath("$.sterilized").value(true))
+                .andExpect(jsonPath("$.breed").value("Labrador"))
+                .andExpect(jsonPath("$.petType").value("Dog"))
+                .andExpect(jsonPath("$.adopted").value(false));
     }
 }
 

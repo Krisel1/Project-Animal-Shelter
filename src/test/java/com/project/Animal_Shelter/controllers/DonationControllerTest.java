@@ -1,22 +1,30 @@
 package com.project.Animal_Shelter.controllers;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.Animal_Shelter.models.Donation;
 import com.project.Animal_Shelter.services.DonationService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.http.MediaType;
 
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
 @WebMvcTest(DonationController.class)
 public class DonationControllerTest {
 
@@ -28,7 +36,10 @@ public class DonationControllerTest {
 
     @InjectMocks
     private DonationController donationController;
-    private Donation donation;
+
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
@@ -68,5 +79,28 @@ public class DonationControllerTest {
         donationService.updateDonation(donation, id);
 
         verify(donationService, times(1)).updateDonation(donation, id);
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    public void testCreateDonation() throws Exception {
+        // Dato de prueba
+        Donation donation = new Donation(1L, "Vadim", 1000);
+
+        // Mockeamos el comportamiento del servicio
+        when(donationService.createDonation(any(Donation.class))).thenReturn(donation);
+
+        // Convertimos el objeto Donation a JSON
+        String donationJson = objectMapper.writeValueAsString(donation);
+
+        // Realizamos la petición POST al controlador con el token CSRF
+        mockMvc.perform(post("/donations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(donationJson)
+                        .with(csrf())) // Incluir un token CSRF simulado
+                .andExpect(status().isOk()) // Esperamos un código 200 OK
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("Vadim"))
+                .andExpect(jsonPath("$.donation").value(1000));
     }
 }
