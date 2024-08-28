@@ -10,7 +10,7 @@ public class PetService {
     @Autowired
     IPetRepository iPetRepository;
 
-    public void deletePet(long id) {
+    public void deletePet(Long id) {
         iPetRepository.deleteById(id);
     }
 
