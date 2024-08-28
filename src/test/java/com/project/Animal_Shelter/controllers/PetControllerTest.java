@@ -41,7 +41,8 @@ public class PetControllerTest {
 
         doNothing().when(petService).deletePet(petId);
 
-        mockMvc.perform(delete("/pets/{id}", petId));
+        mockMvc.perform(delete("/pets/{id}", petId))
+                .andExpect(status().isNoContent());
 
         verify(petService, times(1)).deletePet(petId);
     }
@@ -58,5 +59,4 @@ public class PetControllerTest {
 
         verify(petService, times(1)).deletePet(petId);
     }
-
 }
