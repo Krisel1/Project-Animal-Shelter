@@ -78,6 +78,25 @@ public class DonationServiceTest {
     }
 
     @Test
+    void testCreateDonation() {
+        Donation donation = new Donation();
+        donation.setName("John");
+        donation.setDonation(500);
+
+        when(donationRepository.save(donation)).thenAnswer(invocation -> {
+            Donation savedDonation = invocation.getArgument(0);
+            savedDonation.setId(1L); // Simulate ID generation
+            return savedDonation;
+        });
+
+        Donation createdDonation = donationService.createDonation(donation);
+        assertNotNull(createdDonation);
+        assertEquals(1L, createdDonation.getId());
+        assertEquals("John", createdDonation.getName());
+        assertEquals(500, createdDonation.getDonation());
+    }
+
+    @Test
     public void testDeleteDonation_WhenDonationNotFound() {
         Long donationId = 1L;
         doThrow(new RuntimeException("Donation not found")).when(donationRepository).deleteById(donationId);

@@ -1,24 +1,28 @@
 package com.project.Animal_Shelter.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project.Animal_Shelter.models.Pet;
 import com.project.Animal_Shelter.models.User;
 import com.project.Animal_Shelter.services.PetService;
-import com.project.Animal_Shelter.services.DonationService;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,14 +35,18 @@ public class PetControllerTest {
 
     @MockBean
     private PetService petService;
-    private DonationService donationService;
 
     @InjectMocks
     private PetController petController;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule()); // Register JavaTimeModule for LocalDateTime serialization
         mockMvc = MockMvcBuilders.standaloneSetup(petController).build();
     }
 
@@ -143,6 +151,42 @@ public class PetControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(petService, times(1)).deletePet(petId);
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    void testCreatePet() throws Exception {
+        Pet pet = new Pet();
+        pet.setDateBirth(LocalDateTime.of(2024, 7, 23, 10, 0));
+        pet.setPetName("Buddy");
+        pet.setDescription("Friendly dog");
+        pet.setAge("2");
+        pet.setSterilized(true);
+        pet.setBreed("Labrador");
+        pet.setPetType("Dog");
+        pet.setAdopted(false);
+
+        when(petService.createPet(any(Pet.class))).thenAnswer(invocation -> {
+            Pet petCreated = invocation.getArgument(0);
+            petCreated.setId(1L);
+            return petCreated;
+        });
+
+        String petJson = objectMapper.writeValueAsString(pet);
+
+        mockMvc.perform(post("/pets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(petJson)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.petName").value("Buddy"))
+                .andExpect(jsonPath("$.description").value("Friendly dog"))
+                .andExpect(jsonPath("$.age").value("2"))
+                .andExpect(jsonPath("$.sterilized").value(true))
+                .andExpect(jsonPath("$.breed").value("Labrador"))
+                .andExpect(jsonPath("$.petType").value("Dog"))
+                .andExpect(jsonPath("$.adopted").value(false));
     }
 
     @Test

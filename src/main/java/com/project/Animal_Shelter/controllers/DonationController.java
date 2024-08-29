@@ -3,6 +3,7 @@ package com.project.Animal_Shelter.controllers;
 import com.project.Animal_Shelter.models.Donation;
 import com.project.Animal_Shelter.services.DonationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,9 +32,10 @@ public class DonationController {
     public void updateDonation(@RequestBody Donation donation, @PathVariable Long id) {
         donationService.updateDonation(donation, id);
     }
-    @PostMapping(path = "/{id}")
-    public Donation createDonation(@RequestBody Donation donation) {
-        return donationService.createDonation(donation);
+    @PostMapping
+    public ResponseEntity<Donation> createDonation(@RequestBody Donation donation) {
+        Donation createdDonation = donationService.createDonation(donation);
+        return ResponseEntity.ok(createdDonation);
 
     }
 }

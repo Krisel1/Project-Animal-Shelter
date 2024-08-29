@@ -153,4 +153,38 @@ public class PetServiceTest {
 
         verify(iPetRepository, times(1)).save(pet);
     }
+
+    @Test
+
+    void testCreatePet() {
+
+        Pet pet = new Pet();
+        pet.setPetName("New Pet");
+        pet.setDescription("New description");
+        pet.setAge("1");
+        pet.setSterilized(false);
+        pet.setBreed("New breed");
+        pet.setPetType("New type");
+
+
+        when(iPetRepository.save(pet)).thenAnswer(invocation -> {
+
+            Pet savedPet = invocation.getArgument(0);
+            savedPet.setId(1L); // o cualquier otro valor único generado automáticamente
+            return savedPet;
+
+        });
+
+
+        Pet createdPet = petService.createPet(pet);
+        assertNotNull(createdPet);
+        assertEquals(1L, createdPet.getId());
+        assertEquals("New Pet", createdPet.getPetName());
+        assertEquals("New description", createdPet.getDescription());
+        assertEquals("1", createdPet.getAge());
+        assertEquals(false, createdPet.isSterilized());
+        assertEquals("New breed", createdPet.getBreed());
+        assertEquals("New type", createdPet.getPetType());
+
+    }
 }
