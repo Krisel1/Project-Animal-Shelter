@@ -7,7 +7,7 @@ import com.project.Animal_Shelter.repositories.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
+import com.project.Animal_Shelter.models.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,4 +51,6 @@ public class AuthService {
                 .role(register.getRole())
                 .build();
     }
+
+
 }
