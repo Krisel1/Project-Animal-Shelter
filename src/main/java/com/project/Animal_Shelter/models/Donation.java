@@ -24,5 +24,4 @@ public class Donation {
     @Column(name = "donation")
     private int donation;
 
-
 }

@@ -1,22 +1,26 @@
 package com.project.Animal_Shelter.controllers;
 
-
 import com.project.Animal_Shelter.models.Donation;
 import com.project.Animal_Shelter.services.DonationService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @WebMvcTest(DonationController.class)
 public class DonationControllerTest {
 
@@ -28,7 +32,12 @@ public class DonationControllerTest {
 
     @InjectMocks
     private DonationController donationController;
-    private Donation donation;
+
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(donationController).build();
+    }
 
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
@@ -69,4 +78,26 @@ public class DonationControllerTest {
 
         verify(donationService, times(1)).updateDonation(donation, id);
     }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    void delete_donation_by_id_success() throws Exception {
+        Long donationId = 1L;
+
+        doNothing().when(donationService).deleteDonation(donationId);
+
+        mockMvc.perform(delete("/donations/{id}", donationId));
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    void delete_donation_by_id_not_found() throws Exception {
+        Long donationId = 1L;
+
+        doThrow(new RuntimeException("Donation not found")).when(donationService).deleteDonation(donationId);
+
+        mockMvc.perform(delete("/donations/{id}", donationId))
+                .andExpect(status().isNotFound());
+    }
+
 }

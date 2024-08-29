@@ -14,9 +14,6 @@ public class PetService {
     @Autowired
     IPetRepository iPetRepository;
 
-    public List<Pet> getAllPets() {
-        return (List<Pet>) iPetRepository.findAll();
-    }
     public Pet getPetByID(Long id) {
         return iPetRepository.findById(id).orElseThrow();
     }
@@ -44,15 +41,20 @@ public class PetService {
         }
         return adoptedAnimalsList;
     }
-    public void deletePet(long id) {
-        iPetRepository.deleteById(id);
-    }
 
-    public void updatePet(Pet pet, long id) {
+    public void updatePet(Pet pet, Long id) {
         pet.setId(id);
         iPetRepository.save(pet);
     }
     public Pet createPet(Pet pet) {
         return iPetRepository.save(pet);
+    }
+
+    public void deletePet(Long id) {
+        iPetRepository.deleteById(id);
+    }
+
+    public List<Pet> getAllPets() {
+        return (List<Pet>) iPetRepository.findAll();
     }
 }
