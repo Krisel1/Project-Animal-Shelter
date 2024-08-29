@@ -73,7 +73,7 @@ public class PetServiceTest {
     @Test
     void get_pest_by_user_ID() {
         ArrayList<Pet> petsList = new ArrayList<>();
-        User firstUser = new User(1L, "Juan", "1234", null);
+        User firstUser = new User(1L, "Juan", "1234", null,null, null);
         Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, firstUser);
         Pet thirdPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, firstUser);
         petsList.add(pet);

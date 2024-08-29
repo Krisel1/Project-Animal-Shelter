@@ -24,12 +24,13 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Basic
     @Column(nullable = false)
-     String username;
-     String password;
-     String email;
+     private String username;
+    @Column(nullable = false)
+     private String password;
+    @Column(nullable = false)
+     private String email;
     @Enumerated(EnumType.STRING)
     ERole role;
 

@@ -56,7 +56,7 @@ public class PetControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void get_all_by_user_id() throws Exception {
-        User user = new User(1L, "Ivan", "1234", null);
+        User user = new User(1L, "Ivan", "1234", null, null,null);
         Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, user);
         Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, user);
         ArrayList<Pet> petsList = new ArrayList<>();
