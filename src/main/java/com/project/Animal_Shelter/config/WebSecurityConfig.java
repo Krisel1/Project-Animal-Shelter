@@ -29,6 +29,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/auth/").permitAll()
                                 .requestMatchers("/api/auth/login").permitAll()
                                 .requestMatchers("/api/auth/register").permitAll()
+                                .requestMatchers("/api/profile/**").authenticated()
 //                                .requestMatchers("/api/test/all").permitAll()
 //                                .requestMatchers("/api/test/user").hasAnyAuthority("ADMIN", "USER")
 //                                .requestMatchers("/api/test/admin").hasAuthority("ADMIN")
