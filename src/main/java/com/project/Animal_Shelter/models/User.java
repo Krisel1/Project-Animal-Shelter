@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-
 @Data
 @Builder
 @Entity
@@ -24,19 +23,24 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Basic
     @Column(nullable = false)
-     private String username;
+    private String username;
+
     @Column(nullable = false)
-     private String password;
+    private String password;
+
     @Column(nullable = false)
-     private String email;
+    private String email;
+
     @Enumerated(EnumType.STRING)
-    ERole role;
+    private ERole role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority((role.name())));
+        // Додаємо префікс "ROLE_" до назви ролі
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
@@ -61,5 +65,4 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Pet> pets;
-
 }

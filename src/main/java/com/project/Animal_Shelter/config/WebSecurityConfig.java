@@ -22,30 +22,22 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf ->
-                        csrf.disable())
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/api/auth/").permitAll()
-                                .requestMatchers("/api/auth/login").permitAll()
-                                .requestMatchers("/api/auth/register").permitAll()
-                                .requestMatchers("/api/profile/**").authenticated()
-//                                .requestMatchers("/api/test/all").permitAll()
-//                                .requestMatchers("/api/test/user").hasAnyAuthority("ADMIN", "USER")
-//                                .requestMatchers("/api/test/admin").hasAuthority("ADMIN")
-                                //.requestMatchers("/api/v1/pets").hasAuthority("ADMIN")
-                                .requestMatchers("/api/v1/pets/delete/**").hasAuthority("ADMIN")
-                                .requestMatchers("/api/v1/pets/update/**").hasAuthority("ADMIN")
-                                .requestMatchers("/api/v1/pets").permitAll()
-                               // .requestMatchers("/api/v1/donations").hasAnyAuthority("ADMIN", "USER")
-                                .requestMatchers("/api/v1/donations/delete/**").hasAuthority("ADMIN")
-                                .requestMatchers("/api/v1/donations/update/**").hasAuthority("ADMIN")
-                                .requestMatchers("/api/v1/donations").permitAll()
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/pets").permitAll() // Дозвіл для getAllPets()// Дозвіл для getPetByID()
+                                .requestMatchers("/pets/withoutAdopted").permitAll() // Дозвіл для getAllAnimalsWithoutAdopted()
+                                .requestMatchers("/pets/adopted/**").permitAll() // Дозвіл для getAllByUserId()
+                                .requestMatchers("/pets/adopted").permitAll() // Дозвіл для getAllAdopted()
+                                .requestMatchers("/pets/delete/**").hasRole("ADMIN")
+//                                .requestMatchers("/pets/update/**").permitAll() // Дозвіл для updatePet()
+//                                .requestMatchers("/pets/create").permitAll()
+//                                .requestMatchers("/profile/").authenticated()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
-                        sessionManager
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

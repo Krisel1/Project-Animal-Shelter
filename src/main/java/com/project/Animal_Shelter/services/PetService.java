@@ -53,6 +53,9 @@ public class PetService {
         iPetRepository.save(pet);
     }
     public Pet createPet(Pet pet) {
+        if (pet.getUser() == null) {
+            pet.setUser(null);
+        }
         return iPetRepository.save(pet);
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/v1/pets")
+@RequestMapping("/pets")
 public class PetController {
 
     @Autowired
@@ -44,17 +44,17 @@ public class PetController {
         return petService.getAllAnimalsAdopted();
     }
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/delete/{id}")
     public void deletePet(@PathVariable("id") Long id) {
        petService.deletePet(id);
     }
 
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/update/{id}")
     public void updatePet(@RequestBody Pet pet, @PathVariable Long id) {
         petService.updatePet(pet, id);
     }
 
-    @PostMapping(path = "/{id}")
+    @PostMapping(path = "/create")
     public Pet createPet(@RequestBody Pet pet) {
         return petService.createPet(pet);
     }
