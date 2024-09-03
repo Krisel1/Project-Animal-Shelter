@@ -39,7 +39,6 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Додаємо префікс "ROLE_" до назви ролі
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
@@ -65,4 +64,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Pet> pets;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Donation> donations;
 }

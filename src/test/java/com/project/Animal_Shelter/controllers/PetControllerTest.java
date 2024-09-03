@@ -46,7 +46,7 @@ public class PetControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void get_pet_by_ID() throws Exception {
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null, null);
         when(petService.getPetByID(1L)).thenReturn(pet);
         mockMvc.perform(get("/pets/1"))
                 .andExpect(status().isOk())

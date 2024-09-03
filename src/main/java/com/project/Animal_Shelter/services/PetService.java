@@ -1,6 +1,7 @@
 package com.project.Animal_Shelter.services;
 
 import com.project.Animal_Shelter.models.Pet;
+import com.project.Animal_Shelter.models.User;
 import com.project.Animal_Shelter.repositories.IPetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,5 +58,19 @@ public class PetService {
             pet.setUser(null);
         }
         return iPetRepository.save(pet);
+    }
+    public void adopt(Long pet_id, Long user_id) {
+        Pet pet = iPetRepository.findById(pet_id).orElseThrow();
+        User user = new User(user_id, null, null,null, null, null, null);
+        User secondUser = new User(1L, null, null,null, null, null, null);
+        if(pet.isAdopted()) {
+            pet.setAdopted(false);
+            pet.setUser(secondUser);
+            iPetRepository.save(pet);
+        } else {
+            pet.setAdopted(true);
+            pet.setUser(user);
+            iPetRepository.save(pet);
+        }
     }
 }

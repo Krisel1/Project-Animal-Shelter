@@ -28,7 +28,9 @@ public class DonationService {
     }
     public Donation createDonation(Donation donation) {
         return iDonationRepository.save(donation);
-
+    }
+    public List<Donation> getAllByUserId(Long userId) {
+        return iDonationRepository.findByUserId(userId);
     }
 
 }
