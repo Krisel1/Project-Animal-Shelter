@@ -37,7 +37,7 @@ public class PetServiceTest {
     @Test
     void get_all_pets() {
         ArrayList<Pet> pets = new ArrayList<>();
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
         pets.add(pet);
         when(iPetRepository.findAll()).thenReturn(pets);
         List<Pet> result = petService.getAllPets();
@@ -47,7 +47,7 @@ public class PetServiceTest {
     }
     @Test
     void get_pet_by_ID() {
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
         when(iPetRepository.findById(1L)).thenReturn(Optional.of(pet));
         Pet result = petService.getPetByID(1L);
         assertNotNull(result);
@@ -56,9 +56,9 @@ public class PetServiceTest {
     @Test
     void get_all_pets_without_adopted() {
         ArrayList<Pet> petsList = new ArrayList<>();
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
-        Pet thirdPet = new Pet(3L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null, null);
+        Pet thirdPet = new Pet(3L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
         petsList.add(pet);
         petsList.add(secondPet);
         petsList.add(thirdPet);
@@ -73,9 +73,9 @@ public class PetServiceTest {
     @Test
     void get_pest_by_user_ID() {
         ArrayList<Pet> petsList = new ArrayList<>();
-        User firstUser = new User(1L, "Juan", "1234", null,null, null);
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, firstUser);
-        Pet thirdPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, firstUser);
+        User firstUser = new User(1L, "Juan", "1234", null,null, null, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false,null, firstUser);
+        Pet thirdPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false,null, firstUser);
         petsList.add(pet);
         petsList.add(thirdPet);
         when(iPetRepository.findByUserId(1L)).thenReturn(petsList);
@@ -88,8 +88,8 @@ public class PetServiceTest {
     @Test
     void get_all_pets_adopted() {
         ArrayList<Pet> petsList = new ArrayList<>();
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null, null);
         petsList.add(pet);
         petsList.add(secondPet);
         when(iPetRepository.findAll()).thenReturn(petsList);
