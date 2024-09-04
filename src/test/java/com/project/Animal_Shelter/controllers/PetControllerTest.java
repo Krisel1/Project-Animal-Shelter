@@ -17,9 +17,12 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class PetControllerTest {
@@ -100,6 +103,17 @@ public class PetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[1].id").value(2L));
+    }
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    void adopt() throws Exception {
+        Pet pet = new Pet(5L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", true, "none", "none", true, null, null);
+        when(petService.adopt(5L, 3L)).thenReturn(pet);
+        mockMvc.perform(post("/pets/adopt/5")
+                        .param("user_id", "3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(5L))
+                .andExpect(jsonPath("$.adopted").value(true));
     }
 }
 

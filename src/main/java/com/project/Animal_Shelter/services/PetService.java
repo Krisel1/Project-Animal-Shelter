@@ -59,18 +59,18 @@ public class PetService {
         }
         return iPetRepository.save(pet);
     }
-    public void adopt(Long pet_id, Long user_id) {
+    public Pet adopt(Long pet_id, Long user_id) {
         Pet pet = iPetRepository.findById(pet_id).orElseThrow();
         User user = new User(user_id, null, null,null, null, null, null);
         User secondUser = new User(1L, null, null,null, null, null, null);
         if(pet.isAdopted()) {
             pet.setAdopted(false);
             pet.setUser(secondUser);
-            iPetRepository.save(pet);
         } else {
             pet.setAdopted(true);
             pet.setUser(user);
-            iPetRepository.save(pet);
         }
+        iPetRepository.save(pet);
+        return pet;
     }
 }

@@ -3,6 +3,7 @@ package com.project.Animal_Shelter.services;
 import com.project.Animal_Shelter.models.Pet;
 import com.project.Animal_Shelter.models.User;
 import com.project.Animal_Shelter.repositories.IPetRepository;
+import com.project.Animal_Shelter.repositories.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,8 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -27,7 +27,9 @@ public class PetServiceTest {
 
     @Mock
     private IPetRepository iPetRepository;
-    private Pet pet;
+
+    @Mock
+    private IUserRepository iUserRepository;
 
     @BeforeEach
     public void setUp() {
@@ -98,5 +100,31 @@ public class PetServiceTest {
         assertEquals(2, petsList.size());
         assertEquals(1, result.size());
         assertEquals(2L, result.get(0).getId());
+    }
+    @Test
+    void adopt_true() {
+        User user = new User(4L, "Juan", "1234", null,null, null, null);
+        Pet pet = new Pet(5L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null, null);
+
+        when(iPetRepository.findById(5L)).thenReturn(Optional.of(pet));
+        when(iUserRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        Pet result = petService.adopt(5L, 4L);
+
+        assertEquals(true, pet.isAdopted());;
+        assertEquals(4L, pet.getUser().getId());;
+    }
+    @Test
+    void adopt_false() {
+        User user = new User(1L, "Juan", "1234", null,null, null, null);
+        Pet pet = new Pet(5L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", true, null, null);
+
+        when(iPetRepository.findById(5L)).thenReturn(Optional.of(pet));
+        when(iUserRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        Pet result = petService.adopt(5L, 1L);
+
+        assertEquals(false, pet.isAdopted());;
+        assertEquals(1L, pet.getUser().getId());;
     }
 }

@@ -60,7 +60,7 @@ public class PetController {
     }
 
     @PostMapping(path = "adopt/{pet_id}")
-    public void adopt(@PathVariable Long pet_id, @RequestParam Long user_id) {
-        petService.adopt(pet_id, user_id);
+    public Pet adopt(@PathVariable Long pet_id, @RequestParam Long user_id) {
+       return petService.adopt(pet_id, user_id);
     }
 }
