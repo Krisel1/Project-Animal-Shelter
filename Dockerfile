@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copiar el archivo JAR de la aplicación al contenedor
-COPY target/Animal-Shelter-0.0.1-SNAPSHOT.jar
+COPY target/Animal-Shelter-0.0.1-SNAPSHOT.jar app.jar
 
 # Exponer el puerto en el que la aplicación se ejecuta
 EXPOSE 8080
