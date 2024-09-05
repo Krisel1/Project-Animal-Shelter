@@ -45,7 +45,6 @@ public class PetControllerTest {
 
     @MockBean
     private PetService petService;
-    private DonationService donationService;
 
     @InjectMocks
     private PetController petController;

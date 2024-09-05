@@ -5,7 +5,6 @@ import com.project.Animal_Shelter.models.Pet;
 import com.project.Animal_Shelter.models.User;
 import com.project.Animal_Shelter.services.DonationService;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,6 +36,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@SpringBootTest
 @AutoConfigureMockMvc
 public class DonationControllerTest {
 
@@ -45,10 +45,6 @@ public class DonationControllerTest {
 
     @MockBean
     private DonationService donationService;
-
-    @InjectMocks
-    private DonationController donationController;
-    private Donation donation;
 
     @Test
     @WithMockUser(username = "juan", roles = {"ADMIN"})
