@@ -65,4 +65,9 @@ public class PetController {
     public Pet adopt(@PathVariable Long pet_id, @RequestParam Long user_id) {
        return petService.adopt(pet_id, user_id);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handlePetNotFound(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }

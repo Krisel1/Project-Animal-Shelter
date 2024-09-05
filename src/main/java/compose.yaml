@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  springboot-app:
+    build: .
+    container_name: animalshelter-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_AnimalShelter
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
