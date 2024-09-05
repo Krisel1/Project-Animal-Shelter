@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import static com.project.Animal_Shelter.models.ERole.ADMIN;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -162,20 +163,20 @@ public class PetControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user", roles = {"USER"})
+    @WithMockUser(username = "user", roles = {"ADMIN"})
     void deletePetByIdSuccess() throws Exception {
-        Long petId = 1L;
+        long petId = 1L;
 
         doNothing().when(petService).deletePet(petId);
 
-        mockMvc.perform(delete("/pets/{id}", petId))
-                .andExpect(status().isNoContent());
+        mockMvc.perform(delete("/pets/delete/{id}", petId))
+                .andExpect(status().isOk());
 
         verify(petService, times(1)).deletePet(petId);
     }
 
     @Test
-    @WithMockUser(username = "user", roles = {"USER"})
+    @WithMockUser(username = "user", roles = {"ADMIN"})
     void testCreatePet() throws Exception {
         Pet pet = new Pet();
         pet.setDateBirth(LocalDateTime.of(2024, 7, 23, 10, 0));
@@ -195,7 +196,7 @@ public class PetControllerTest {
 
         String petJson = objectMapper.writeValueAsString(pet);
 
-        mockMvc.perform(post("/pets")
+        mockMvc.perform(post("/pets/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(petJson)
                         .with(csrf()))
@@ -211,13 +212,13 @@ public class PetControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user", roles = {"USER"})
+    @WithMockUser(username = "user", roles = {"ADMIN"})
     void deletePetByIdNotFound() throws Exception {
         Long petId = 1L;
 
         doThrow(new RuntimeException("Pet not found")).when(petService).deletePet(petId);
 
-        mockMvc.perform(delete("/pets/{id}", petId))
+        mockMvc.perform(delete("/pets/delete/{id}", petId))
                 .andExpect(status().isNotFound());
 
         verify(petService, times(1)).deletePet(petId);
