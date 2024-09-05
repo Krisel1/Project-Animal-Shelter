@@ -1,8 +1,14 @@
-FROM ubuntu:latest
-LABEL authors="F5 01 SEV"
+# Utilizar la imagen oficial de OpenJDK 21
+FROM openjdk:17-jdk-slim
 
-compose.yaml
+# Establecer el directorio de trabajo
+WORKDIR /app
 
+# Copiar el archivo JAR de la aplicación al contenedor
+COPY target/Animal-Shelter-0.0.1-SNAPSHOT.jar app.jar
 
+# Exponer el puerto en el que la aplicación se ejecuta
+EXPOSE 8080
 
-ENTRYPOINT ["top", "-b"]
+# Comando para ejecutar la aplicación
+ENTRYPOINT ["java", "-jar", "app.jar"]
