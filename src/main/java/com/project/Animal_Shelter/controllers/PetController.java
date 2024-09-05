@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,12 +28,10 @@ public class PetController {
     public List<Pet> getAllPets() {
         return petService.getAllPets();
     }
-
     @GetMapping(path = "/{id}")
     public Pet getPetByID(@PathVariable Long id) {
         return petService.getPetByID(id);
     }
-
     @GetMapping(path = "/withoutAdopted")
     public List<Pet> getAllAnimalsWithoutAdopted() {
         return petService.getAllAnimalsWithoutAdopted();
@@ -40,35 +39,30 @@ public class PetController {
 
     @GetMapping(path = "/adopted/{user_id}")
     public List<Pet> getAllByUserId(@PathVariable Long user_id) {
-        return petService.getAllByUserId(user_id);
+      return petService.getAllByUserId(user_id);
     }
-
     @GetMapping(path = "/adopted")
     public List<Pet> getAllAdopted() {
         return petService.getAllAnimalsAdopted();
     }
 
-    @PutMapping(path = "/{id}")
+    @DeleteMapping(path = "/delete/{id}")
+    public void deletePet(@PathVariable("id") Long id) {
+       petService.deletePet(id);
+    }
+
+    @PutMapping(path = "/update/{id}")
     public void updatePet(@RequestBody Pet pet, @PathVariable Long id) {
         petService.updatePet(pet, id);
     }
 
-
-    @PostMapping
-    public ResponseEntity<Pet> createPet(@RequestBody Pet pet) {
-        Pet createdPet = petService.createPet(pet);
-        return ResponseEntity.ok(createdPet);
-
+    @PostMapping(path = "/create")
+    public Pet createPet(@RequestBody Pet pet) {
+        return petService.createPet(pet);
     }
 
-    // Corrected deletePet method
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePet(@PathVariable("id") Long id) {
-        try {
-            petService.deletePet(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    @PostMapping(path = "adopt/{pet_id}")
+    public Pet adopt(@PathVariable Long pet_id, @RequestParam Long user_id) {
+       return petService.adopt(pet_id, user_id);
     }
 }

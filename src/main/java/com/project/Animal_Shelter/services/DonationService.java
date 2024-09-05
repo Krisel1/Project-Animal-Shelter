@@ -13,27 +13,24 @@ public class DonationService {
     @Autowired
     IDonationRepository iDonationRepository;
 
-
-        public Donation getDonationByID (Long id){
-            return iDonationRepository.findById(id).orElseThrow();
-        }
-
-        public void updateDonation (Donation donation,Long id){
-            donation.setId(id);
-            iDonationRepository.save(donation);
-        }
-
-        public Donation createDonation (Donation donation){
-            return iDonationRepository.save(donation);
-
-        }
-
-    public void deleteDonation(Long id) {
-        Donation donation = getDonationByID(id);
-        iDonationRepository.delete(donation);
-    }
-
     public List<Donation> getAllDonations() {
         return (List<Donation>) iDonationRepository.findAll();
     }
+    public Donation getDonationByID(Long id) {
+        return iDonationRepository.findById(id).orElseThrow();
+    }
+    public void deleteDonation(long id) {
+        iDonationRepository.deleteById(id);
+    }
+    public void updateDonation(Donation donation, long id) {
+        donation.setId(id);
+        iDonationRepository.save(donation);
+    }
+    public Donation createDonation(Donation donation) {
+        return iDonationRepository.save(donation);
+    }
+    public List<Donation> getAllByUserId(Long userId) {
+        return iDonationRepository.findByUserId(userId);
+    }
+
 }

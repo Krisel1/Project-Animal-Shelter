@@ -3,6 +3,7 @@ package com.project.Animal_Shelter.services;
 import com.project.Animal_Shelter.models.Pet;
 import com.project.Animal_Shelter.models.User;
 import com.project.Animal_Shelter.repositories.IPetRepository;
+import com.project.Animal_Shelter.repositories.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,15 +12,13 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import java.time.LocalDateTime;
-
 
 public class PetServiceTest {
 
@@ -28,6 +27,9 @@ public class PetServiceTest {
 
     @Mock
     private IPetRepository iPetRepository;
+
+    @Mock
+    private IUserRepository iUserRepository;
 
     @BeforeEach
     void setup() {
@@ -70,7 +72,7 @@ public class PetServiceTest {
     @Test
     void get_all_pets() {
         ArrayList<Pet> pets = new ArrayList<>();
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
         pets.add(pet);
         when(iPetRepository.findAll()).thenReturn(pets);
         List<Pet> result = petService.getAllPets();
@@ -80,7 +82,7 @@ public class PetServiceTest {
     }
     @Test
     void get_pet_by_ID() {
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
         when(iPetRepository.findById(1L)).thenReturn(Optional.of(pet));
         Pet result = petService.getPetByID(1L);
         assertNotNull(result);
@@ -89,9 +91,9 @@ public class PetServiceTest {
     @Test
     void get_all_pets_without_adopted() {
         ArrayList<Pet> petsList = new ArrayList<>();
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
-        Pet thirdPet = new Pet(3L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null, null);
+        Pet thirdPet = new Pet(3L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
         petsList.add(pet);
         petsList.add(secondPet);
         petsList.add(thirdPet);
@@ -106,9 +108,9 @@ public class PetServiceTest {
     @Test
     void get_pest_by_user_ID() {
         ArrayList<Pet> petsList = new ArrayList<>();
-        User firstUser = new User(1L, "Juan", "1234", null);
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, firstUser);
-        Pet thirdPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, firstUser);
+        User firstUser = new User(1L, "Juan", "1234", null,null, null, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false,null, firstUser);
+        Pet thirdPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false,null, firstUser);
         petsList.add(pet);
         petsList.add(thirdPet);
         when(iPetRepository.findByUserId(1L)).thenReturn(petsList);
@@ -121,8 +123,8 @@ public class PetServiceTest {
     @Test
     void get_all_pets_adopted() {
         ArrayList<Pet> petsList = new ArrayList<>();
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null, null);
         petsList.add(pet);
         petsList.add(secondPet);
         when(iPetRepository.findAll()).thenReturn(petsList);
@@ -132,6 +134,33 @@ public class PetServiceTest {
         assertEquals(1, result.size());
         assertEquals(2L, result.get(0).getId());
     }
+    @Test
+    void adopt_true() {
+        User user = new User(4L, "Juan", "1234", null,null, null, null);
+        Pet pet = new Pet(5L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null, null);
+
+        when(iPetRepository.findById(5L)).thenReturn(Optional.of(pet));
+        when(iUserRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        Pet result = petService.adopt(5L, 4L);
+
+        assertEquals(true, pet.isAdopted());;
+        assertEquals(4L, pet.getUser().getId());;
+    }
+    @Test
+    void adopt_false() {
+        User user = new User(1L, "Juan", "1234", null,null, null, null);
+        Pet pet = new Pet(5L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", true, null, null);
+
+        when(iPetRepository.findById(5L)).thenReturn(Optional.of(pet));
+        when(iUserRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        Pet result = petService.adopt(5L, 1L);
+
+        assertEquals(false, pet.isAdopted());;
+        assertEquals(1L, pet.getUser().getId());;
+    }
+
     @Test
     public void testUpdatePetService() {
 

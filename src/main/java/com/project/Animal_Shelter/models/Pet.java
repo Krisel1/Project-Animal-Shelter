@@ -46,11 +46,14 @@ public class Pet {
 
     @Column(name = "adopted")
     private boolean adopted;
+    @Column(name = "url")
+    private String url;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "user_id", nullable = true)
     @JsonBackReference
     private User user;
+
 
 }
 

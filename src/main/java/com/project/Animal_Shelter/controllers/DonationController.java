@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/donations")
@@ -24,18 +25,21 @@ public class DonationController {
         return donationService.getDonationByID(id);
     }
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/delete/{id}")
     public void deleteDonationById(@PathVariable("id") Long id) {
         donationService.deleteDonation(id);
     }
-    @PutMapping(path = "/{id}")
+
+    @PutMapping(path = "/update/{id}")
     public void updateDonation(@RequestBody Donation donation, @PathVariable Long id) {
         donationService.updateDonation(donation, id);
     }
-    @PostMapping
-    public ResponseEntity<Donation> createDonation(@RequestBody Donation donation) {
-        Donation createdDonation = donationService.createDonation(donation);
-        return ResponseEntity.ok(createdDonation);
-
+    @PostMapping(path = "/create")
+    public Donation createDonation(@RequestBody Donation donation) {
+        return donationService.createDonation(donation);
+    }
+    @GetMapping(path = "/getAllByUser/{userId}")
+    public List<Donation> getAllByUserId(@PathVariable Long userId) {
+        return donationService.getAllByUserId(userId);
     }
 }

@@ -1,6 +1,7 @@
 package com.project.Animal_Shelter.services;
 
 import com.project.Animal_Shelter.models.Pet;
+import com.project.Animal_Shelter.models.User;
 import com.project.Animal_Shelter.repositories.IPetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class PetService {
     @Autowired
     IPetRepository iPetRepository;
 
+    public List<Pet> getAllPets() {
+        return (List<Pet>) iPetRepository.findAll();
+    }
     public Pet getPetByID(Long id) {
         return iPetRepository.findById(id).orElseThrow();
     }
@@ -41,20 +45,29 @@ public class PetService {
         }
         return adoptedAnimalsList;
     }
+    public void deletePet(long id) {
+        iPetRepository.deleteById(id);
+    }
 
-    public void updatePet(Pet pet, Long id) {
+    public void updatePet(Pet pet, long id) {
         pet.setId(id);
         iPetRepository.save(pet);
     }
     public Pet createPet(Pet pet) {
         return iPetRepository.save(pet);
     }
-
-    public void deletePet(Long id) {
-        iPetRepository.deleteById(id);
-    }
-
-    public List<Pet> getAllPets() {
-        return (List<Pet>) iPetRepository.findAll();
+    public Pet adopt(Long pet_id, Long user_id) {
+        Pet pet = iPetRepository.findById(pet_id).orElseThrow();
+        User user = new User(user_id, null, null,null, null, null, null);
+        User secondUser = new User(1L, null, null,null, null, null, null);
+        if(pet.isAdopted()) {
+            pet.setAdopted(false);
+            pet.setUser(secondUser);
+        } else {
+            pet.setAdopted(true);
+            pet.setUser(user);
+        }
+        iPetRepository.save(pet);
+        return pet;
     }
 }

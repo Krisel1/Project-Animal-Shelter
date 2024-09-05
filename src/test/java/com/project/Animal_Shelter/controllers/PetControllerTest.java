@@ -4,12 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project.Animal_Shelter.models.Pet;
 import com.project.Animal_Shelter.models.User;
+import com.project.Animal_Shelter.services.DonationService;
 import com.project.Animal_Shelter.services.PetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -22,12 +27,17 @@ import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
-@WebMvcTest(PetController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class PetControllerTest {
 
     @Autowired
@@ -35,6 +45,7 @@ public class PetControllerTest {
 
     @MockBean
     private PetService petService;
+    private DonationService donationService;
 
     @InjectMocks
     private PetController petController;
@@ -51,10 +62,10 @@ public class PetControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user", roles = {"USER"})
+    @WithMockUser(username = "user", roles = {"ADMIN"})
     void get_all_pets() throws Exception {
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", true, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null, null);
         ArrayList<Pet> petsList = new ArrayList<>();
         petsList.add(pet);
         petsList.add(secondPet);
@@ -68,7 +79,7 @@ public class PetControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void get_pet_by_ID() throws Exception {
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null, null);
         when(petService.getPetByID(1L)).thenReturn(pet);
         mockMvc.perform(get("/pets/1"))
                 .andExpect(status().isOk())
@@ -78,9 +89,9 @@ public class PetControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void get_all_by_user_id() throws Exception {
-        User user = new User(1L, "Ivan", "1234", null);
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, user);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", true, user);
+        User user = new User(1L, "Ivan", "1234", null, null,null, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false,null, user);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true,null, user);
         ArrayList<Pet> petsList = new ArrayList<>();
         petsList.add(pet);
         petsList.add(secondPet);
@@ -95,8 +106,8 @@ public class PetControllerTest {
     @WithMockUser(username = "user", roles = {"USER"})
     void get_all_animals_without_adopted() throws Exception {
         ArrayList<Pet> petsList = new ArrayList<>();
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", false, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",false, null, null);
         petsList.add(pet);
         petsList.add(secondPet);
         when(petService.getAllAnimalsWithoutAdopted()).thenReturn(petsList);
@@ -110,8 +121,8 @@ public class PetControllerTest {
     @WithMockUser(username = "user", roles = {"USER"})
     void get_all_animals_adopted() throws Exception {
         ArrayList<Pet> petsList = new ArrayList<>();
-        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", true, null);
-        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none", true, null);
+        Pet pet = new Pet(1L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null, null);
+        Pet secondPet = new Pet(2L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", false, "none", "none",true, null, null);
         petsList.add(pet);
         petsList.add(secondPet);
         when(petService.getAllAnimalsAdopted()).thenReturn(petsList);
@@ -119,6 +130,17 @@ public class PetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[1].id").value(2L));
+    }
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    void adopt() throws Exception {
+        Pet pet = new Pet(5L, LocalDateTime.of(2024, 7, 23, 10, 0), "Amigo", "none", "1", true, "none", "none", true, null, null);
+        when(petService.adopt(5L, 3L)).thenReturn(pet);
+        mockMvc.perform(post("/pets/adopt/5")
+                        .param("user_id", "3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(5L))
+                .andExpect(jsonPath("$.adopted").value(true));
     }
 
     @Test

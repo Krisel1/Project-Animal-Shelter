@@ -1,5 +1,6 @@
 package com.project.Animal_Shelter.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,5 +24,10 @@ public class Donation {
 
     @Column(name = "donation")
     private int donation;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "userId", nullable = true)
+    @JsonBackReference
+    private User user;
 
 }
